@@ -13,6 +13,7 @@ Clustered index ID_enveloppe, ID
 - ID PK
 - ID_enveloppe
 - name
+- date
 
 Clusetered Index ID_enveloppe, ID
 
