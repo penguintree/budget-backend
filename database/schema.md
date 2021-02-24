@@ -7,7 +7,7 @@
 - ID_enveloppe PK
 - description
 
-Clustered index ID_enveloppe, ID
+index ID_enveloppe, ID
 
 ## TABLE operation
 - ID PK
@@ -15,7 +15,7 @@ Clustered index ID_enveloppe, ID
 - name
 - date
 
-Clusetered Index ID_enveloppe, ID
+Index ID_enveloppe, ID
 
 ## TABLE operation_details
 - ID PK
