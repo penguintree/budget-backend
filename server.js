@@ -1,5 +1,4 @@
-const dotenv = require('dotenv');
-dotenv.config();
+const appSettings = require('./appSettings');
 
 const express = require('express');
 
@@ -16,7 +15,7 @@ routingConfig.enumerate(({ verb, route, handler }) => {
    app[verb](route, handler);
 });
 
-const port = process.env.SERVER_PORT;
+const port = appSettings.serverPort;
 
 app.listen(port, () => {
    console.log(`listening to ${port}`);

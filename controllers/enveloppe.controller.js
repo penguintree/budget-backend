@@ -1,15 +1,14 @@
 const routingConfig = require('~/routingConfig');
+const enveloppeRepository = require('~/repositories/enveloppeRepository');
 
 routingConfig.register({
    route: '/enveloppes',
    verb: 'get',
    handler: getAll
 });
-function getAll(req, res){
-   res.json([{
-      id: 1,
-      name: '2021',
-   }]);
+async function getAll(req, res){
+   const enveloppes = await enveloppeRepository.getAll();
+   res.json(enveoppes);
 }
 
 module.exports = 'enveloppeController';

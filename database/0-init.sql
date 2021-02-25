@@ -46,6 +46,7 @@ CREATE TABLE operation_details (
    ID INT NOT NULL AUTO_INCREMENT,
    ID_operation INT NOT NULL,
    description NVARCHAR(255) NOT NULL,
+   PRIMARY KEY (ID),
    CONSTRAINT FK_operation_details_operation FOREIGN KEY
       (ID_operation)
    REFERENCES operation(ID)

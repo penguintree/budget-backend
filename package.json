@@ -6,7 +6,8 @@
   "dependencies": {
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
-    "link-module-alias": "^1.2.0"
+    "link-module-alias": "^1.2.0",
+    "mysql": "^2.18.1"
   },
   "devDependencies": {},
   "scripts": {
@@ -15,7 +16,7 @@
     "postinstall": "link-module-alias"
   },
   "_moduleAliases": {
-     "~": "."
+    "~": "."
   },
   "author": "",
   "license": "ISC"
