@@ -14,9 +14,9 @@ class ConnectionManager{
       this._pool = mysql.createPool(poolConfig);
    }
 
-   query(statement) {
+   query(statement, values = []) {
       return new Promise((resolve, reject) => {
-         this._pool.query(statement, (error, results /*, fields*/) => {
+         this._pool.query(statement, values, (error, results /*, fields*/) => {
             if (error) {
                reject(error);
                return;

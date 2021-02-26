@@ -8,7 +8,51 @@ routingConfig.register({
 });
 async function getAll(req, res){
    const enveloppes = await enveloppeRepository.getAll();
-   res.json(enveoppes);
+   res.json(enveloppes);
+}
+
+routingConfig.register({
+   route: '/enveloppes',
+   verb: 'post',
+   handler: post
+});
+async function post(req, res){
+   const writeModel = req.body;
+
+   const enveloppe = await enveloppeRepository.add(writeModel.name);
+
+   res.json(enveloppe);
+}
+
+routingConfig.register({
+   route: '/enveloppes/:id',
+   verb: 'get',
+   handler: get
+});
+async function get(req, res){
+   const id = req.params.id;
+
+   const enveloppe = await enveloppeRepository.getById(id);
+
+   if(enveloppe === null) {
+      res.status(404).end();
+      return;
+   } 
+
+   res.json(enveloppe);
+}
+
+routingConfig.register({
+   route: '/enveloppes/:id',
+   verb: 'delete',
+   handler: deleteById
+});
+async function deleteById(req, res){
+   const id = req.params.id;
+
+   await enveloppeRepository.deleteById(id);
+
+   res.status(201).end();
 }
 
 module.exports = 'enveloppeController';
