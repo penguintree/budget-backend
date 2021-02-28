@@ -50,7 +50,7 @@ routingConfig.register({
 async function deleteById(req, res){
    const id = req.params.id;
 
-   await enveloppeRepository.deleteById(id);
+   await enveloppeRepository.delete(id);
 
    res.status(204).end();
 }

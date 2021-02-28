@@ -4,7 +4,7 @@ module.exports = {
    getAll,
    add,
    getById,
-   deleteById,
+   delete: deleteById,
    update
 }
 
