@@ -21,7 +21,7 @@ async function post(req, res){
 
    const enveloppe = await enveloppeRepository.add(writeModel.name);
 
-   res.json(enveloppe);
+   res.status(201).json(enveloppe);
 }
 
 routingConfig.register({
@@ -52,7 +52,28 @@ async function deleteById(req, res){
 
    await enveloppeRepository.deleteById(id);
 
-   res.status(201).end();
+   res.status(204).end();
+}
+
+routingConfig.register({
+   route : '/enveloppes/:id',
+   verb: 'put',
+   handler: put
+});
+async function put(req, res){
+   const id = req.params.id;
+   const writeModel = req.body;
+
+   const enveloppe = await enveloppeRepository.get(id);
+   if (enveloppe === null) {
+      res.status(404).end();
+      return;
+   }
+
+   enveloppe.name = writeModel.name;
+   await enveloppeRepository.update(enveloppe);
+
+   res.status(204).end();
 }
 
 module.exports = 'enveloppeController';

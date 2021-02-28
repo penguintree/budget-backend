@@ -4,7 +4,8 @@ module.exports = {
    getAll,
    add,
    getById,
-   deleteById
+   deleteById,
+   update
 }
 
 async function getAll(){
@@ -47,4 +48,15 @@ async function deleteById(id){
    const query = 'DELETE FROM enveloppe WHERE ID = ?';
 
    await connectionManager.query(query, [id]);
+}
+
+async function update({ id, name }) {
+   const query = 
+   `UPDATE enveloppe
+   SET name = ?
+   where ID = ?`;
+
+   const params = [name, id];
+
+   await connectionManager.query(query, params);
 }

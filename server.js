@@ -5,23 +5,30 @@ const express = require('express');
 const app = express();
 app.use(express.json());
 
-// TODO: Error handler, does not seems to work, at least not when sql query crashes.
-app.use(function(err, req, res, next){
-   console.log('***** error handled ******');
-   console.warn(err);
-   res.status(500).send(err);
-})
-
-app.get('/', (req, res) => {
-   res.send('hello world');
+// Accept only json type post, put, patch
+const jsonRequiredMethods = ['POST', 'PUT', 'PATCH'];
+app.use((req, res, next) => {
+   if(jsonRequiredMethods.includes(req.method) && req.headers['content-type'] !== 'application/json') {
+      console.log(req.headers['content-type']);
+      console.log(req.headers);
+      res.status(400).send('Server requires application/json');
+   } else {
+      next();
+   }
 });
 
 require ('./controllers');
 const routingConfig = require('./routingConfig');
 
 routingConfig.enumerate(({ verb, route, handler }) => {
-   app[verb](route, handler);
+   app[verb](route, (res, req, next) => {
+      handler(res, req).catch(next);
+   });
 });
+
+// Error handling
+const errorHandler = require('./errorHandler');
+app.use(errorHandler);
 
 const port = appSettings.serverPort;
 
