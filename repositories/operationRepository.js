@@ -5,7 +5,8 @@ module.exports = {
    getByEnveloppe,
    getById,
    add,
-   delete: $delete
+   delete: $delete,
+   update
 };
 
 const baseQuery = 
@@ -97,6 +98,93 @@ async function $delete(idEnveloppe, id) {
    const params = [ idEnveloppe, id ];
 
    await connectionManager.query(query, params);
+}
+
+async function update(idEnveloppe, operation) {
+   const updatedResult = await connectionManager.useTransaction(
+      // update operation's head.
+      async(connection) => {
+         const query =
+         `UPDATE operation
+             SET name = ?, date = DATE(?)
+           WHERE ID_enveloppe = ?
+             AND ID = ?`;
+         const params = [ operation.name, operation.date, idEnveloppe, operation.id ];
+
+         await connection.query(query, params);
+      },
+      // Delete removed details.
+      async (connection) => {
+         const idDetails = operation.details.filter(d => d.id !== undefined && d.id !== null).map(d => d.id);
+         let query = 
+         `DELETE FROM operation_details
+           WHERE ID_operation = ? `;
+         if (idDetails.length > 0) {
+             query += `AND ID NOT IN (${idDetails.map(() => '?').join(',')})`;
+         }
+         const params = [ operation.id, ...idDetails ];
+
+         await connection.query(query, params);
+      },
+      // Insert new details.
+      async (connection) => {
+         const newDetails = operation.details.filter(d => d.id === undefined || d.id === null);
+         if (newDetails.length === 0) return;
+
+         let query = 
+         `INSERT INTO operation_details
+         (ID_operation, ID_category, description, amount)
+         VALUES `;
+
+         const valuesRows = [];
+         const params = [];
+         for (let od of newDetails) {
+            valuesRows.push(`(?, ?, ?, ?)`);
+      
+            params.push(operation.id, od.categoryId, od.description, od.amount);
+         };
+      
+         query += valuesRows.join(', ');
+
+         await connection.query(query, params);
+      },
+      // Update existant details
+      async (connection) => {
+         const existingDetails = operation.details.filter(d => d.id !== undefined && d.id !== null);
+         if (existingDetails.length === 0) return;
+
+         const updateStatements = [];
+         const params = [];
+         for (let od of existingDetails) {
+            updateStatements.push(
+               `UPDATE operation_details
+                   SET ID_category = ?, description = ?, amount = ?
+                 WHERE ID_operation = ?
+                   AND ID = ?`
+            );
+            params.push(od.categoryId, od.description, od.amount, operation.id, od.id);
+         }
+
+         const query = updateStatements.join('\n;\n');
+
+         await connection.query(query, params);
+      },
+      // Read updated operation.
+      async (connection) => {
+         let query = 
+         `${baseQuery}
+         WHERE o.ID_enveloppe = ?
+           AND o.ID = ?`
+         
+         const params = [ idEnveloppe, operation.id ];
+
+         const result = await connection.query(query, params);
+
+         return result;
+      }
+   );
+
+   return mapResults(updatedResult)[0];
 }
 
 function mapResults(results){

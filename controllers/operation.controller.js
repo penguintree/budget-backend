@@ -62,3 +62,27 @@ async function $delete(req, res) {
 
    res.status(204).end();
 }
+
+routingConfig.register({
+   route: '/enveloppes/:idEnveloppe/operations/:id',
+   verb: 'put',
+   handler: put
+})
+async function put(req, res) {
+   const idEnveloppe = req.params.idEnveloppe;
+   const id = req.params.id;
+
+   const writeModel = req.body;
+   writeModel.id = id;
+
+   const operation = await operationRepository.getById(idEnveloppe, id);
+   if (operation === null) {
+      res.status(404);
+      res.end();
+      return;
+   }
+
+   const updatedOperation = await operationRepository.update(idEnveloppe, writeModel);
+
+   res.json(updatedOperation);
+}

@@ -38,7 +38,7 @@ class ConnectionManager{
                let params = [];
                for (let call of callstack) {
                   try {
-                     params = await call(queryable, ...params);
+                     params = await call(queryable, ...(params || []));
                   } catch (errQuery) {
                      reject(errQuery);
                      connection.rollback();
