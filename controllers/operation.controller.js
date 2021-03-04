@@ -23,9 +23,15 @@ async function getById(req, res) {
    const idEnveloppe = req.params.idEnveloppe;
    const id = req.params.id;
 
-   const operations = await operationRepository.getById(idEnveloppe, id);
+   const operation = await operationRepository.getById(idEnveloppe, id);
 
-   res.json(operations);
+   if (operation === null) {
+      res.status(404);
+      res.end();
+      return;
+   }
+
+   res.json(operation);
 }
 
 routingConfig.register({
@@ -41,4 +47,18 @@ async function post(req, res) {
    const operations = await operationRepository.add(idEnveloppe, writeModel);
 
    res.json(operations);
+}
+
+routingConfig.register({
+   route: '/enveloppes/:idEnveloppe/operations/:id',
+   verb: 'delete',
+   handler: $delete
+});
+async function $delete(req, res) {
+   const idEnveloppe = req.params.idEnveloppe;
+   const id = req.params.id;
+
+   await operationRepository.delete(idEnveloppe, id);
+
+   res.status(204).end();
 }

@@ -4,7 +4,8 @@ const arrayUtils = require('~/arrayUtils');
 module.exports = {
    getByEnveloppe,
    getById,
-   add
+   add,
+   delete: $delete
 };
 
 const baseQuery = 
@@ -42,7 +43,7 @@ async function getById(idEnveloppe, id) {
 
    const results = await connectionManager.query(query, params);
 
-   return mapResults(results);
+   return mapResults(results)[0] ?? null;
 }
 
 async function add(idEnveloppe, operation) {
@@ -89,6 +90,13 @@ async function add(idEnveloppe, operation) {
    );
 
    return mapResults(results);
+}
+
+async function $delete(idEnveloppe, id) {
+   const query = 'DELETE FROM operation WHERE ID_enveloppe = ? AND id = ?';
+   const params = [ idEnveloppe, id ];
+
+   await connectionManager.query(query, params);
 }
 
 function mapResults(results){
