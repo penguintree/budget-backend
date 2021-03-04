@@ -49,13 +49,18 @@ ON operation (ID_enveloppe, ID)
 CREATE TABLE operation_details (
    ID INT NOT NULL AUTO_INCREMENT,
    ID_operation INT NOT NULL,
+   ID_category INT NOT NULL,
    description NVARCHAR(255) NOT NULL,
    amount DECIMAL(15,2) NOT NULL,
    PRIMARY KEY (ID),
    CONSTRAINT FK_operation_details_operation FOREIGN KEY
       (ID_operation)
    REFERENCES operation(ID)
-   ON DELETE CASCADE
+   ON DELETE CASCADE,
+   CONSTRAINT FK_operation_detail_category FOREIGN KEY
+      (ID_category)
+   REFERENCES category(ID)
+   ON DELETE NO ACTION
 )
 
 ;

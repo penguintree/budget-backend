@@ -1,0 +1,4 @@
+-- TODO :
+-- enveloppes coherances :
+-- operation_detail.ID_category 
+-- referenced category enveloppe must match operation's enveloppe
