@@ -4,6 +4,12 @@ const knownErrors = [
       messageIndex: 0,
       statusCode: 400,
       responseMessageCode: 'duplicate'
+   },
+   {
+      errorMessage: 'ER_SIGNAL_EXCEPTION: INEXISTANT CATEGORY',
+      messageIndex: 0,
+      statusCode: 400,
+      responseMessageCode: 'incoherence'
    }
 ];
 
