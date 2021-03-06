@@ -19,6 +19,14 @@ class ReadOnlyCollection{
       return privates[this].source[index];
    }
 
+   filter(predicat) {
+      return private[this].source.filter(predicat);
+   }
+
+   map(factory){
+      return private[this].source.map(factory);
+   }
+
    [Symbol.iterator]() {
       var index = -1;
       var source  = privates[this].source;
