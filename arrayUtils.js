@@ -1,6 +1,9 @@
 module.exports = {
-   groupBy
+   groupBy,
+   toReadOnlyCollection
 };
+
+const ReadOnlyCollection = require('~/ReadOnlyCollection');
 
 function groupBy(array, keySelector, valueSelector) {
    return array.reduce(groupBy$reducer(keySelector, valueSelector), {});
@@ -17,4 +20,8 @@ function groupBy$reducer(keySelector, valueSelector){
 
       return accumulator;
    };
+}
+
+function toReadOnlyCollection(array){
+   return new ReadOnlyCollection(array);
 }

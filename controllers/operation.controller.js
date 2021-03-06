@@ -1,5 +1,6 @@
 const routingConfig = require('~/routingConfig');
 const operationRepository = require('~/repositories/operationRepository');
+const operationModel = require('~/models/operation.model');
 
 routingConfig.register({
    route: '/enveloppes/:idEnveloppe/operations',
@@ -11,7 +12,8 @@ async function getAll(req, res) {
 
    const operations = await operationRepository.getByEnveloppe(idEnveloppe);
 
-   res.json(operations);
+   const readModel = operations.map(o => o.toReadModel());
+   res.json(readModel);
 }
 
 routingConfig.register({
@@ -31,7 +33,8 @@ async function getById(req, res) {
       return;
    }
 
-   res.json(operation);
+   const readModel = operation.toReadModel();
+   res.json(readModel);
 }
 
 routingConfig.register({
@@ -44,9 +47,11 @@ async function post(req, res) {
 
    const writeModel = req.body;
 
-   const operations = await operationRepository.add(idEnveloppe, writeModel);
+   const operation = operationModel.operationFromPostModel(writeModel);
+   const insertedOperation = await operationRepository.add(idEnveloppe, operation);
 
-   res.json(operations);
+   const readModel = insertedOperation.toReadModel();
+   res.json(readModel);
 }
 
 routingConfig.register({
@@ -73,7 +78,6 @@ async function put(req, res) {
    const id = req.params.id;
 
    const writeModel = req.body;
-   writeModel.id = id;
 
    const operation = await operationRepository.getById(idEnveloppe, id);
    if (operation === null) {
@@ -82,7 +86,10 @@ async function put(req, res) {
       return;
    }
 
-   const updatedOperation = await operationRepository.update(idEnveloppe, writeModel);
+   operation.applyPutModel(writeModel);
 
-   res.json(updatedOperation);
+   const updatedOperation = await operationRepository.update(idEnveloppe, operation);
+
+   const readModel = updatedOperation.toReadModel();
+   res.json(readModel);
 }

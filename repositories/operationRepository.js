@@ -1,6 +1,8 @@
 const connectionManager = require('./connectionManager');
 const arrayUtils = require('~/arrayUtils');
 
+const operationModel = require('~/models/operation.model');
+
 module.exports = {
    getByEnveloppe,
    getById,
@@ -195,20 +197,20 @@ function mapResults(results){
    for (let idOp in groupedByOperation) {
       const data = groupedByOperation[idOp];
 
-      const op = {
-         id: idOp,
-         name: data[0].name,
-         date: data[0].date
-      };
+      const operation = operationModel.newOperation(idOp, data[0].name, data[0].date);
 
-      op.details = data.map( d => ({
+      const details = data.map( d => ({
          id: d.detId,
          description: d.description,
          amount: d.amount,
          categoryId: d.categoryId
       }));
 
-      operations.push(op);
+      for(let d of details){
+         operation.addDetail(d);
+      }
+
+      operations.push(operation);
    }
 
    return operations;
