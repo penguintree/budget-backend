@@ -10,6 +10,14 @@ const knownErrors = [
       messageIndex: 0,
       statusCode: 400,
       responseMessageCode: 'incoherence'
+   },
+   {
+      errorMessage: 'ModelError',
+      messageIndex: 0,
+      statusCode: 400,
+      responseMessageCode(err) {
+         return err.innerMessages;
+      } 
    }
 ];
 
@@ -19,8 +27,14 @@ module.exports = (err, req, res, next) => {
       for(let known of knownErrors) {
          if(errMsg.indexOf(known.errorMessage) === known.messageIndex){
             res.status(known.statusCode);
+            let errorContent;
+            if(typeof(known.responseMessageCode) === 'function') {
+               errorContent = known.responseMessageCode(err);
+            } else {
+               errorContent = known.responseMessageCode;
+            }
             res.json({
-               error: known.responseMessageCode
+               error: errorContent
             });
             return;
          }

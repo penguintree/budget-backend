@@ -142,6 +142,10 @@ function initOperationFields(create, id, name, date, out) {
       out.errors.push(`name _must_ be a string, got ${typeof name}`);
    }
 
+   if (name.length === 0) {
+      out.errors.push('name cannot be empty');
+   }
+   
    if (name.length > 255) {
       out.errors.push('name cannot exceed 255 char long');
    }

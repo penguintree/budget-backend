@@ -2,7 +2,11 @@ class ModelError extends Error {
    constructor(message) {
       super('ModelError');
 
-      this.innerMessage = message;
+      if (Array.isArray(message)) {
+         this.innerMessages = message;   
+      } else {
+         this.innerMessages = [ message ];
+      }
    }
 }
 

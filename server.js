@@ -10,13 +10,15 @@ app.use(express.json());
 // Accept only json type post, put, patch
 const jsonRequiredMethods = ['POST', 'PUT', 'PATCH'];
 app.use((req, res, next) => {
-   if(jsonRequiredMethods.includes(req.method) && req.headers['content-type'] !== 'application/json') {
-      console.log(req.headers['content-type']);
-      console.log(req.headers);
-      res.status(400).send('Server requires application/json');
-   } else {
-      next();
+   if(jsonRequiredMethods.includes(req.method)) {
+      const contentType = req.headers['content-type'];
+      if (!contentType.split(';').includes('application/json')) {
+         res.status(400).send(`Server requires application/json. Received ${contentType}`);
+         return;
+      }
    }
+
+   next();
 });
 
 require ('./controllers');
