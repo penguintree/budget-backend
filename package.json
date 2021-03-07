@@ -4,6 +4,7 @@
   "description": "",
   "main": "server.js",
   "dependencies": {
+    "cors": "^2.8.5",
     "dotenv-flow": "^3.2.0",
     "express": "^4.17.1",
     "link-module-alias": "^1.2.0",

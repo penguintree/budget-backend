@@ -1,8 +1,10 @@
 const appSettings = require('./appSettings');
 
 const express = require('express');
+const cors = require('cors');
 
 const app = express();
+app.use(cors({ origin: appSettings.corsOrigin }));
 app.use(express.json());
 
 // Accept only json type post, put, patch
