@@ -34,7 +34,7 @@ module.exports = (err, req, res, next) => {
                errorContent = known.responseMessageCode;
             }
             res.json({
-               error: errorContent
+               error: known.responseMessageCode
             });
             return;
          }
