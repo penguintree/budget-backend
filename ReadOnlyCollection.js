@@ -20,11 +20,11 @@ class ReadOnlyCollection{
    }
 
    filter(predicat) {
-      return private[this].source.filter(predicat);
+      return privates[this].source.filter(predicat);
    }
 
    map(factory){
-      return private[this].source.map(factory);
+      return privates[this].source.map(factory);
    }
 
    [Symbol.iterator]() {
