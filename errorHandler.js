@@ -6,6 +6,12 @@ const knownErrors = [
       responseMessageCode: 'duplicate'
    },
    {
+      errorMessage: 'ER_DATA_TOO_LONG:',
+      messageIndex: 0,
+      statusCode: 400,
+      responseMessageCode: 'max legth exceeded'
+   },
+   {
       errorMessage: 'ER_SIGNAL_EXCEPTION: INEXISTANT CATEGORY',
       messageIndex: 0,
       statusCode: 400,
