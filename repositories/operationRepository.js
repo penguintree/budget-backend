@@ -92,7 +92,7 @@ async function add(idEnveloppe, operation) {
       }
    );
 
-   return mapResults(results);
+   return mapResults(results)[0];
 }
 
 async function $delete(idEnveloppe, id) {

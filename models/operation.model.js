@@ -16,9 +16,9 @@ function newOperation(id, name, date) {
 
 function operationFromPostModel(model) {
    const operation = new Operation(undefined, model.name, model.date, true);
-   const details = privates[operation].details;
+   const details = privates.get(operation).details;
    for(let d of model.details) {
-      details.push(new OperationDetail(undefined, d.description, d.categoryId, d.amount, true));
+      details.push(new OperationDetail(d, true));
    }
    return operation
 }
@@ -128,8 +128,10 @@ class OperationDetail {
 
 function initOperationFields(create, id, name, date, out) {
    out.errors = [];
-   if (create && id !== undefined) {
-      out.errors.push('id _must_ be undefined in creation');
+   if (create) {
+      if (id !== undefined) {
+         out.errors.push('id _must_ be undefined in creation');
+      }
    }
    else {
       id = +id;
