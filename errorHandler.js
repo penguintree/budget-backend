@@ -28,6 +28,7 @@ const knownErrors = [
 ];
 
 module.exports = (err, req, res, next) => {
+   console.log(err);
    const errMsg = err.message;
    if (errMsg){
       for(let known of knownErrors) {
@@ -40,7 +41,7 @@ module.exports = (err, req, res, next) => {
                errorContent = known.responseMessageCode;
             }
             res.json({
-               error: known.responseMessageCode
+               error: errorContent
             });
             return;
          }
